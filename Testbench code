@@ -1,0 +1,65 @@
+module ram_4x4 (    input wire clk, 
+input wire we,     
+ input wire [1:0] addr,
+ input wire [3:0] din, 
+output reg [3:0] dout   
+);
+
+ // Instantiate the RAM module    ram_4x4_simple uut (
+    .clk(clk),       
+    .we(we),        
+    .addr(addr),        
+    .din(din),        
+    .dout(dout)    
+);
+
+ // Clock generation    
+always #5 clk = ~clk; // 10 time units period, 50% duty cycle    
+// Test procedure    
+initial 
+begin        // Initialize signals        
+clk = 0;        
+we = 0;        
+addr = 2'b00;        
+din = 4'b0000;        // Wait for a few clock cycles        
+#10;
+ // Write test cases        
+// Write value 4'b1010 to address 2'b00        
+addr = 2'b00;        
+din = 4'b1010;       
+ we = 1;        #10; // Wait for one clock cycle        
+ // Disable write and check read value        
+we = 0;        #10; // Wait for one clock cycle        
+if (dout !== 4'b1010) 
+      $display("Test failed for addr=2'b00");        
+// Write value 4'b1100 to address 2'b01       
+ addr = 2'b01;        din = 4'b1100;        we = 1;        
+#10; // Wait for one clock cycle       
+ // Disable write and check read value        
+we = 0;        
+#10; // Wait for one clock cycle        
+if (dout !== 4'b1100) 
+     $display("Test failed for addr=2'b01");        
+// Write value 4'b1111 to address 2'b10        
+addr = 2'b10;        
+din = 4'b1111;        
+we = 1;        
+
+#10; // Wait for one clock cycle
+// Disable write and check read value        
+we = 0;       
+ #10; // Wait for one clock cycle       
+if (dout !== 4'b1111) 
+$display("Test failed for addr=2'b10");        
+// Write value 4'b0001 to address 2'b11        
+addr = 2'b11;        
+din = 4'b0001;        
+we = 1;        
+#10; // Wait for one clock cycle        
+// Disable write and check read value        
+we = 0;        
+#10; // Wait for one clock cycle       
+if (dout !== 4'b0001) 
+$display("Test failed for addr=2'b11");        
+// Finish simulation         
+endendmodule
