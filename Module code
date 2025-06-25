@@ -1,0 +1,11 @@
+module ram_4x4 (    input wire clk,         // Clock signal    input wire we,          // Write enable signal  
+ input wire [1:0] addr,  // 2-bit address (4 locations)   
+ input wire [3:0] din,   // 4-bit data input   
+ output reg [3:0] dout   // 4-bit data output
+);
+always @(posedge clk) begin
+     if (we) 
+          memory_array[address] <= data_in; // Write data to memory
+     end
+         data_out <= memory_array[address]; // Read data from memory end
+endmodule
